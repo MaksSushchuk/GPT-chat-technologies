@@ -1,0 +1,125 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Book Recommendation API",
+        "description": "API для рекомендації книг на основі NLP та схожості описів.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/recommend": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Рекомендації книг за схожістю",
+                "description": "Повертає список книг, схожих на вказану, використовуючи аналіз тексту (назва, жанри, опис) та косинусну схожість.",
+                "operationId": "7841b7292a60fa91d9b68ea65e918ed7",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Назва книги, для якої потрібно знайти схожі",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Harry Potter and the Philosopher's Stone"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список рекомендованих книг",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "input_book": {
+                                            "type": "string",
+                                            "example": "Harry Potter and the Philosopher's Stone"
+                                        },
+                                        "recommendations": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Percy Jackson & The Lightning Thief"
+                                                    },
+                                                    "author": {
+                                                        "type": "string",
+                                                        "example": "Rick Riordan"
+                                                    },
+                                                    "genres": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        },
+                                                        "example": [
+                                                            "Fantasy",
+                                                            "Young Adult",
+                                                            "Adventure"
+                                                        ]
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Молодий герой, грецька міфологія, магія..."
+                                                    },
+                                                    "similarity": {
+                                                        "description": "Відсоток схожості (0–100)",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 92.13
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Не передано параметр title",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Параметр title є обовʼязковим. Наприклад: /api/recommend?title=Harry%20Potter"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Книга не знайдена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Книгу не знайдено за назвою: Harry Potter"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Books",
+            "description": "Books"
+        }
+    ]
+}
